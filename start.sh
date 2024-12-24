@@ -11,7 +11,11 @@ fi
 
 # Generate code from OpenAPI spec
 echo "Generating code from OpenAPI spec..."
-oapi-codegen -config api/config.yaml api/openapi.yaml
+oapi-codegen --config api/config.yaml api/openapi.yaml
+
+# Update dependencies
+echo "Updating dependencies..."
+go mod tidy
 
 # Run the service
 echo "Starting the service..."

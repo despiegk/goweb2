@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/main/configuration-schema.json": ["api/config.yaml"],
+    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.json": ["api/openapi.yaml"]
+  }
+}

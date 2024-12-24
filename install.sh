@@ -16,11 +16,11 @@ fi
 
 # Install required packages
 go get -u github.com/labstack/echo/v4
-go get -u github.com/deepmap/oapi-codegen/v2/pkg/middleware
+go get -u github.com/oapi-codegen/runtime
 go get -u github.com/getkin/kin-openapi/openapi3
 
 # Install oapi-codegen CLI
-go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 
 # Create necessary directories
 mkdir -p api/v1
