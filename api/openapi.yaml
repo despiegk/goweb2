@@ -1,0 +1,221 @@
+openapi: 3.1.0
+info:
+  title: GoWeb2 Issue Tracking API
+  version: '1.0'
+  description: A RESTful web service for issue tracking management
+
+servers:
+  - url: http://localhost:8081/api/v1
+    description: Local development server
+
+components:
+  schemas:
+    TimeEntry:
+      type: object
+      properties:
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+          nullable: true
+        description:
+          type: string
+        time_spent:
+          type: number
+          format: double
+          description: Time spent in hours
+        user_id:
+          type: string
+      required:
+        - start_time
+        - description
+        - time_spent
+        - user_id
+
+    Issue:
+      type: object
+      required:
+        - title
+        - description
+        - category
+        - status
+        - priority
+        - severity
+        - project_id
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [task, story, question, bug, crm]
+          default: task
+        status:
+          type: string
+          enum: [new_status, todo, in_progress, completed, question, blocked, verified]
+          default: todo
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+          default: medium
+        severity:
+          type: string
+          enum: [normal, high, serious, disaster]
+          default: normal
+        due_date:
+          type: string
+          format: date-time
+        assignees:
+          type: array
+          items:
+            type: string
+        labels:
+          type: array
+          items:
+            type: string
+        estimated_hours:
+          type: number
+          format: double
+          nullable: true
+        actual_hours:
+          type: number
+          format: double
+          nullable: true
+        dependencies:
+          type: array
+          items:
+            type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        time_entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeEntry'
+        total_time_spent:
+          type: number
+          format: double
+          description: Total time spent in hours
+        project_id:
+          type: string
+
+paths:
+  /issues:
+    get:
+      operationId: listIssues
+      summary: Get all issues
+      description: Get a list of all issues
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+    post:
+      operationId: createIssue
+      summary: Create a new issue
+      description: Create a new issue with the provided information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '201':
+          description: Issue created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          description: Invalid input
+
+  /issues/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getIssue
+      summary: Get an issue by ID
+      description: Get detailed information about a specific issue
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '404':
+          description: Issue not found
+    put:
+      operationId: updateIssue
+      summary: Update an issue
+      description: Update an existing issue with new information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '200':
+          description: Issue updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          description: Invalid input
+        '404':
+          description: Issue not found
+    delete:
+      operationId: deleteIssue
+      summary: Delete an issue
+      description: Delete an issue by ID
+      responses:
+        '204':
+          description: Issue deleted successfully
+        '404':
+          description: Issue not found
+
+  /issues/{id}/time:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      operationId: addTimeEntry
+      summary: Add time entry to an issue
+      description: Add a new time entry to an existing issue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeEntry'
+      responses:
+        '201':
+          description: Time entry added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeEntry'
+        '400':
+          description: Invalid input
+        '404':
+          description: Issue not found

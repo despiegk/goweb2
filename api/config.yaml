@@ -1,0 +1,10 @@
+package: api
+generate:
+  echo-server: true
+  types: true
+  spec: true
+  client: true
+  models: true
+output: api/generated.go
+output-options:
+  skip-prune: true
